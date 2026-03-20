@@ -17,8 +17,11 @@ export class ApolloClient {
     const url = `${this.baseUrl}${path}`;
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...body, api_key: this.apiKey }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": this.apiKey,
+      },
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -33,14 +36,17 @@ export class ApolloClient {
     path: string,
     params: Record<string, string> = {},
   ): Promise<T> {
-    const searchParams = new URLSearchParams({
-      ...params,
-      api_key: this.apiKey,
-    });
-    const url = `${this.baseUrl}${path}?${searchParams.toString()}`;
+    const searchParams = new URLSearchParams(params);
+    const qs = searchParams.toString();
+    const url = qs
+      ? `${this.baseUrl}${path}?${qs}`
+      : `${this.baseUrl}${path}`;
     const response = await fetch(url, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": this.apiKey,
+      },
     });
 
     if (!response.ok) {
