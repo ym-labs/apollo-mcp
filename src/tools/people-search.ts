@@ -73,7 +73,7 @@ export function registerPeopleSearch(server: McpServer): void {
       try {
         const result =
           await apolloClient.post<PeopleSearchResponse>(
-            "/v1/mixed_people/search",
+            "/v1/mixed_people/api_search",
             params,
           );
         return {
